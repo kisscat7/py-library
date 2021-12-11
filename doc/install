@@ -1,0 +1,20 @@
+# 数据库建库
+create database pyLibrary default character set utf8 collate utf8_general_ci;
+# 配置链接权限
+grant all privileges on pyLibrary.* to 'py_library'@'localhost' identified by 'py_library_123456' with grant option;
+
+# python 依赖安装
+python -m pip install --upgrade pip
+python -m pip install django==2.2.5
+python -m pip install mysqlclient
+python -m pip install pillow
+
+# 生成数据库
+python manage.py makemigrations
+python manage.py migrate
+# 运行指令
+python manage.py runserver 8000 --noreload
+
+
+# 增减超级管理员
+python manage.py createsuperuser

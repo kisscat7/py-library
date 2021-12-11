@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% block title %}个人中心{% endblock %}
+{% block style %}
+    <style>
+        .userCenter {
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            margin: -10px 0 0 -10px;
+            width: 100%;
+        }
+
+        .userCenter .userMenu {
+            width: 30%;
+            display: inline-block;
+        }
+
+        .userCenter .userMenu ul li {
+            margin-top: 20px; /* 两个li之间的距离*/
+            position: relative;
+            overflow: hidden;
+            font-size: 20px;
+            width: auto;
+        }
+
+        .userCenter .userMenu ul li:hover {
+            background-color: #d58181;
+        }
+
+        .userCenter .menuPage {
+            display: inline-block;
+        }
+
+        .userCenter .menuPage .SetUserData {
+            font-size: 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 60%;
+            color: white;
+            margin-bottom: 10px;
+            background-color: #555555;
+            border: 1px solid black;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #CDC673;
+            border: 1px solid black;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+    </style>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        function onSetUserData() {
+            const setObj = document.getElementById('SetUserDataDivId');
+            setObj.removeAttribute('hidden')
+
+            const realObj = document.getElementById('RealNameDivId');
+            realObj.setAttribute('hidden', null)
+            const myBookObj = document.getElementById('MyBooksDivId');
+            myBookObj.setAttribute('hidden', null)
+            const brObj = document.getElementById('BorrowedRecordDivId');
+            brObj.setAttribute('hidden', null)
+            const cpObj = document.getElementById('ChangePasswordDivId');
+            cpObj.setAttribute('hidden', null)
+        }
+
+        function onRealName() {
+            const realObj = document.getElementById('RealNameDivId');
+            realObj.removeAttribute('hidden')
+
+            const setObj = document.getElementById('SetUserDataDivId');
+            setObj.setAttribute('hidden', null)
+            const myBookObj = document.getElementById('MyBooksDivId');
+            myBookObj.setAttribute('hidden', null)
+            const brObj = document.getElementById('BorrowedRecordDivId');
+            brObj.setAttribute('hidden', null)
+            const cpObj = document.getElementById('ChangePasswordDivId');
+            cpObj.setAttribute('hidden', null)
+        }
+
+        function onMyBooks() {
+            const myBookObj = document.getElementById('MyBooksDivId');
+            myBookObj.removeAttribute('hidden')
+
+            const setObj = document.getElementById('SetUserDataDivId');
+            setObj.setAttribute('hidden', null)
+            const realObj = document.getElementById('RealNameDivId');
+            realObj.setAttribute('hidden', null)
+            const brObj = document.getElementById('BorrowedRecordDivId');
+            brObj.setAttribute('hidden', null)
+            const cpObj = document.getElementById('ChangePasswordDivId');
+            cpObj.setAttribute('hidden', null)
+        }
+
+        function onBorrowedRecord() {
+            const brObj = document.getElementById('BorrowedRecordDivId');
+            brObj.removeAttribute('hidden')
+
+            const setObj = document.getElementById('SetUserDataDivId');
+            setObj.setAttribute('hidden', null)
+            const realObj = document.getElementById('RealNameDivId');
+            realObj.setAttribute('hidden', null)
+            const myBookObj = document.getElementById('MyBooksDivId');
+            myBookObj.setAttribute('hidden', null)
+            const cpObj = document.getElementById('ChangePasswordDivId');
+            cpObj.setAttribute('hidden', null)
+        }
+
+        function onChangePassword() {
+            const cpObj = document.getElementById('ChangePasswordDivId');
+            cpObj.removeAttribute('hidden')
+
+            const brObj = document.getElementById('BorrowedRecordDivId');
+            brObj.setAttribute('hidden', null)
+            const setObj = document.getElementById('SetUserDataDivId');
+            setObj.setAttribute('hidden', null)
+            const realObj = document.getElementById('RealNameDivId');
+            realObj.setAttribute('hidden', null)
+            const myBookObj = document.getElementById('MyBooksDivId');
+            myBookObj.setAttribute('hidden', null)
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="userCenter">
+        {#菜单#}
+        <div class="userMenu">
+            <ul>
+                <li><a onclick="onSetUserData()">修改信息</a></li>
+                <li><a onclick="onRealName()">实名认证</a></li>
+                <li><a onclick="onMyBooks()">我的书架</a></li>
+                <li><a onclick="onBorrowedRecord()">借阅记录</a></li>
+                <li><a onclick="onChangePassword()">修改密码</a></li>
+                <li><a href="{% url 'gateway_exit' %}">退出登录</a></li>
+            </ul>
+        </div>
+        {# 详情页 #}
+        <div class="menuPage">
+            {# 修改玩家数据 #}
+            <div id="SetUserDataDivId" class="SetUserData" hidden>
+                <form action="{% url 'user_setData' %}" method="post">
+                    {% csrf_token %}
+                    手机号：<input type="tel" name="tel" required="required" value="{{ userData.tel }}"><br>
+                    用户名：<input type="text" name="username" required="required" value="{{ userData.username }}">
+                    <button type="submit">保存</button>
+                </form>
+            </div>
+            {# 实名认证 #}
+            <div id="RealNameDivId" class="RealName" hidden>
+                {% if userData.real %}
+                    <h1>您的实名认证已完成</h1>
+                {% else %}
+                    <form action="{% url 'user_realName' %}" method="post">
+                        {% csrf_token %}
+                        真实姓名：<input type="text" name="name" required="required"><br>
+                        身份证号：<input type="text" name="identityId" required="required">
+                        <button type="submit">认证</button>
+                    </form>
+                {% endif %}
+            </div>
+            {# 我的书架 #}
+            <div id="MyBooksDivId" class="MyBooks" hidden>
+                <table>
+                    <tr>
+                        <th>书籍Id</th>
+                        <th></th>
+                        <th>书&emsp;名</th>
+                        <th></th>
+                        <th>借出时间</th>
+                        <th></th>
+                        <th>归还截止时间</th>
+                        <th></th>
+                        <th>状&emsp;态</th>
+                        <th></th>
+                        <th>操&emsp;作</th>
+                    </tr>
+                    {% for book in bookRack %}
+                        {% if book.Status > 0 %}
+                        {% else %}
+                            <tr style="text-align: center">
+                                <td>{{ book.BookId }}</td>
+                                <td>&emsp;&emsp;</td>
+                                <td>{{ book.BookName }}</td>
+                                <td>&emsp;&emsp;</td>
+                                <td>{{ book.StartTime | date:'Y-m-d' }}</td>
+                                <td>&emsp;&emsp;</td>
+                                <td>{{ book.EndTime | date:'Y-m-d' }}</td>
+                                <td>&emsp;&emsp;</td>
+                                <td>{% if book.Status == -1 %}<p style="font-weight: lighter; color: red">已超时
+                                    <p>{% elif book.Status == 0 %}借阅中{% endif %}
+                                </td>
+                                <td>&emsp;&emsp;</td>
+                                <td>{% if book.Status < 1 %}
+                                    <a href="{% url 'book_return' book.BookId %}">归还</a>{% endif %}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+
+            </div>
+            {# 借阅记录 #}
+            <div id="BorrowedRecordDivId" class="BorrowedRecord" hidden>
+                <table>
+                    <tr>
+                        <th>书籍Id</th>
+                        <th></th>
+                        <th>书&emsp;名</th>
+                        <th></th>
+                        <th>借出时间</th>
+                        <th></th>
+                        <th>归还截止时间</th>
+                        <th></th>
+                        <th>状&emsp;态</th>
+                    </tr>
+                    {% for book in bookRecords %}
+                        <tr style="text-align: center">
+                            <td>{{ book.BookId }}</td>
+                            <td>&emsp;&emsp;</td>
+                            <td>{{ book.BookName }}</td>
+                            <td>&emsp;&emsp;</td>
+                            <td>{{ book.StartTime | date:'Y-m-d' }}</td>
+                            <td>&emsp;&emsp;</td>
+                            <td>{{ book.EndTime | date:'Y-m-d' }}</td>
+                            <td>&emsp;&emsp;</td>
+                            <td>{% if book.Status == -1 %}<p style="font-weight: lighter; color: red">已超时
+                                <p>{% elif book.Status == 0 %}借阅中{% else %}已归还{% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+            </div>
+            {# 修改密码 #}
+            <div id="ChangePasswordDivId" class="ChangePassword" hidden>
+                <form action="{% url 'user_resetPassword' %}" method="post">
+                    {% csrf_token %}
+                    设置新密码：<input type="password" name="password" required="required"><br>
+                    确认新密码：<input type="password" name="confirm_password" required="required">
+                    <button type="submit">保存</button>
+                </form>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+{% endblock %}

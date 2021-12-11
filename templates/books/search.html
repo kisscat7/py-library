@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}首页{% endblock %}
+{% block style %}
+    <style>
+
+        .index {
+            position: absolute;
+            top: 5%;
+            width: 100%;
+            vertical-align: middle;
+            text-align: center;
+            padding: 20px
+        }
+
+        input {
+            padding: 10px;
+            width: 60%;
+            color: white;
+            margin-bottom: 10px;
+            background-color: #555555;
+            border: 1px solid black;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 20%;
+            padding: 10px;
+            background-color: #CDC673;
+            border: 1px solid black;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .books {
+            position: absolute;
+            width: 60%;
+            margin-bottom: 10px;
+            margin-right: 20%;
+            margin-left: 20%;
+            vertical-align: middle;
+            child-align: middle;
+            text-align: center;
+            padding: 20px
+        }
+    </style>
+{% endblock %}
+{% block script %}
+
+    <script type="text/javascript">
+        function onSearch() {
+            const searchObj = document.getElementById('searchInput')
+            const keyword = searchObj.value
+            if (keyword === '') {
+                alert('搜索关键字为空')
+            } else {
+                const buttonObj = document.getElementById('searchButton')
+                buttonObj.setAttribute('href', '{% url 'book_search' %}' + '?keyword=' + keyword)
+            }
+        }
+    </script>
+{% endblock %}
+{% block content %}
+    <div class="index">
+        <h1>Search</h1>
+        <input type="text" id="searchInput" name="keywords" placeholder="书名/作者/ISBN编号" required="required"
+               value="{{ keyword }}"><br>
+        <a id="searchButton">
+            <button type="submit" onclick="onSearch()">搜索</button>
+        </a>
+        <br><br>
+
+        <table class="books" border="1" style="height: auto">
+            {% if sBookData|length > 0 %}
+                <tr>
+                    <th>ID</th>
+                    <th>书名</th>
+                    <th>作者</th>
+                    <th>ISBN</th>
+                    <th>出版社</th>
+                    <th>库存</th>
+                    <th></th>
+                </tr>
+                {% for book in sBookData %}
+                    <tr style="font-size: 12px">
+                        <td>{{ book.Id }}</td>
+                        <td>{{ book.BookName }}</td>
+                        <td>{{ book.Author }}</td>
+                        <td>{{ book.ISBN }}</td>
+                        <td>{{ book.Publish }}</td>
+                        <td>{{ book.Number }}</td>
+                        <td><a href="{% url 'book_details' book.Id %}">详情</a></td>
+                    </tr>
+                    <tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+{% endblock %}

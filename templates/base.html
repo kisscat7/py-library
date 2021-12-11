@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ userId }}{% block title %}{% endblock %}</title>
+    <style>
+        /* 让页面所有元素的padding和margin都设置为0 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* 设置背景图，字体设置为微软雅黑 */
+        body {
+            background: #FADBDB;
+            font-family: "微软雅黑", sans-serif;
+        }
+
+        /* 整个登录框的css，并使用绝对定位居中 */
+
+
+        .top {
+            /* 设置宽度高度背景颜色 */
+            height: auto; /*高度改为自动高度*/
+            width: 100%;
+            margin-left: 0;
+            position: fixed; /*固定在顶部*/
+            top: 0; /*离顶部的距离为0*/
+            margin-bottom: 5px;
+        }
+
+        .top ul {
+            /* 清除ul标签的默认样式 */
+            width: auto; /*宽度也改为自动*/
+            list-style-type: none;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-left: 5%;
+            /* margin-top: 0;          */
+            padding: 0;
+
+        }
+
+        .top li {
+            float: left; /* 使li内容横向浮动，即横向排列  */
+            margin-right: 2%; /* 两个li之间的距离*/
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top li a {
+            /* 设置链接内容显示的格式*/
+            display: block; /* 把链接显示为块元素可使整个链接区域可点击 */
+            color: #cd3bb1;
+            text-align: center;
+            padding: 3px;
+            overflow: hidden;
+            text-decoration: none; /* 去除下划线 */
+            font-weight: 700;
+            font-size: 22px;
+            font-family: 华文仿宋;
+
+        }
+
+        .top li a:hover {
+            /* 鼠标选中时背景变为黑色 */
+            background-color: #d58181;
+        }
+
+        .top ul li ul {
+            /* 设置二级菜单 */
+            margin-left: -0.2px;
+            background: rgb(255, 206, 206);
+            position: relative;
+            display: none; /* 默认隐藏二级菜单的内容 */
+
+        }
+
+        .top ul li ul li {
+            /* 二级菜单li内容的显示 */
+
+            float: none;
+            text-align: center;
+        }
+
+        .top ul li:hover ul {
+            /* 鼠标选中二级菜单内容时 */
+            display: block;
+        }
+    </style>
+    {% block style %}
+
+    {% endblock %}
+
+
+
+    <script>
+        function showError() {
+            document.getElementById('light').style.display = 'block';
+            document.getElementById('fade').style.display = 'block';
+        }
+
+        function closeError() {
+            document.getElementById('light').style.display = 'none';
+            document.getElementById('fade').style.display = 'none'
+        }
+
+        function onLoading() {
+            {% if error %}
+                alert('{{ error }}')
+            {% endif %}
+        }
+
+        window.onload = onLoading
+    </script>
+    {% block script %}
+
+    {% endblock %}
+</head>
+<body>
+<div class="top">
+    <ul>
+        <li><a href="{% url 'book_index' %}">主页</a></li>
+        <li><a href="#">分类</a></li>
+        <li><a href="#">搜索</a></li>
+        <li><a href="#">排行</a></li>
+
+        <li style="float:right">
+            {% if userData %}
+                <a href="{% url 'user_index' %}">{{ userData.username }}</a>
+                <ul>
+                    <li><a href="{% url 'user_index' %}">个人中心</a></li>
+                    <li><a href="{% url 'gateway_exit' %}">退出登录</a></li>
+                </ul>
+            {% else %}
+                <a href="{% url 'gateway_login' %}">登录</a>
+                <ul>
+                    <li><a href="{% url 'gateway_register' %}">注册</a></li>
+                </ul>
+            {% endif %}
+        </li>
+    </ul>
+</div>
+<hr>
+{% block content %}
+
+{% endblock %}
+</body>
+</html>

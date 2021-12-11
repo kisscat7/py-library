@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}注册{% endblock %}
+{% block style %}
+    <style>
+        .register {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -150px 0 0 -150px;
+            width: 300px;
+            height: 300px;
+        }
+
+        /* 前面分析过的h1标签的css，text-shadow设置阴影使文字更好看，letter-spacing设置字符间距 */
+        .register h1 {
+            color: #555555;
+            text-shadow: 0px 10px 8px #CDC673;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        .register form input::-webkit-input-placeholder {
+            /* placeholder颜色  */
+            color: #aab2bd;
+            /* placeholder字体大小  */
+            font-size: 12px;
+            /* placeholder位置  */
+            text-align: center;
+        }
+
+        /* 两个输入框的css，border属性设置边框线粗细以及颜色，border-radius设置边框的圆角角度 */
+        .register form input {
+            padding: 10px;
+            width: 100%;
+            color: white;
+            margin-bottom: 10px;
+            background-color: #555555;
+            border: 1px solid black;
+            border-radius: 4px;
+            letter-spacing: 2px;
+        }
+
+        /* 登录按钮的css，cursor:pointer当鼠标移到按钮上面时变成小手形状 */
+        .register form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #CDC673;
+            border: 1px solid black;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="register">
+        <h1>Register</h1>
+        <form action="{% url "gateway_register" %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="tel" placeholder="请输入注册手机号" required="required"
+                   value="{{ registerBakData.tel }}">
+            <input type="text" name="account" placeholder="请输入注册账号" required="required"
+                   value="{{ registerBakData.account }}">
+            <input type="text" name="username" placeholder="请输入用户名" required="required"
+                   value="{{ registerBakData.username }}">
+            <input type="password" name="password" placeholder="请输入密码" required="required"
+                   value="{{ registerBakData.password }}">
+            <input type="password" name="affirmPassword" placeholder="请确认密码" required="required"
+                   value="{{ registerBakData.affirmPassword }}">
+            <button type="submit">注册</button>
+        </form>
+    </div>
+{% endblock %}

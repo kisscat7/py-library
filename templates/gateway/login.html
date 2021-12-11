@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}登录{% endblock %}
+{% block style %}
+    <style>
+        .login {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -150px 0 0 -150px;
+            width: 300px;
+            height: 300px;
+        }
+
+        /* 前面分析过的h1标签的css，text-shadow设置阴影使文字更好看，letter-spacing设置字符间距 */
+        .login h1 {
+            color: #555555;
+            text-shadow: 0px 10px 8px #CDC673;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        .login form input::-webkit-input-placeholder {
+            /* placeholder颜色  */
+            color: #aab2bd;
+            /* placeholder字体大小  */
+            font-size: 12px;
+            /* placeholder位置  */
+            text-align: center;
+        }
+
+        /* 两个输入框的css，border属性设置边框线粗细以及颜色，border-radius设置边框的圆角角度 */
+        .login form input {
+            padding: 10px;
+            width: 100%;
+            color: white;
+            margin-bottom: 10px;
+            background-color: #555555;
+            border: 1px solid black;
+            border-radius: 4px;
+            letter-spacing: 2px;
+        }
+
+        /* 登录按钮的css，cursor:pointer当鼠标移到按钮上面时变成小手形状 */
+        .login form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #CDC673;
+            border: 1px solid black;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="login">
+        <h1>Login</h1>
+        <form action="{% url "gateway_login" %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="account" placeholder="用户名" required="required">
+            <input type="password" name="password" placeholder="密  码" required="required">
+            <button type="submit">登录</button>
+        </form>
+    </div>
+{% endblock %}

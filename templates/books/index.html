@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}首页{% endblock %}
+{% block style %}
+    <style>
+
+        .index {
+            position: absolute;
+            top: 20%;
+            width: 100%;
+            vertical-align: middle;
+            text-align: center;
+            padding: 20px
+        }
+
+        input {
+            padding: 10px;
+            width: 60%;
+            color: white;
+            margin-bottom: 10px;
+            background-color: #555555;
+            border: 1px solid black;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 20%;
+            padding: 10px;
+            background-color: #CDC673;
+            border: 1px solid black;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+    <style>
+        .black_overlay{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:1001;
+            -moz-opacity: 0.8; //提供给mozilla firefox的css属性，用来控制透明度数值为1的话就是不透明度为100%
+            opacity:.80;
+            filter: alpha(opacity=88); //w3c标准透明度就是opacity,filter只有IE才能用,其他浏览器都支持opacity,
+        }
+        .white_content {
+            display: none;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+            width: 55%;
+            height: 55%;
+            padding: 20px;
+            border: 10px solid orange;
+            background-color: white;
+            z-index:1002;
+            overflow: auto; //如果内容被修剪，则浏览器会显示滚动条以便查看其余的内容。属性规定当内容溢出元素框时发生的事情。
+        }
+    </style>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        function onSearch() {
+            const searchObj = document.getElementById('searchInput')
+            const keyword = searchObj.value
+            if (keyword === '') {
+                alert('搜索关键字为空')
+            } else {
+                const buttonObj = document.getElementById('searchButton')
+                buttonObj.setAttribute('href', '{% url 'book_search' %}' + '?keyword=' + keyword)
+            }
+        }
+    </script>
+{% endblock %}
+{% block content %}
+    <div class="index">
+        <h1>Search</h1>
+        <input type="text" id="searchInput" name="keywords" placeholder="书名/作者/ISBN编号" required="required"
+               value="{{ keyword }}"><br>
+        <a id="searchButton">
+            <button type="submit" onclick="onSearch()">搜索</button>
+        </a>
+    </div>
+    {{ sBookData }}
+{% endblock %}
